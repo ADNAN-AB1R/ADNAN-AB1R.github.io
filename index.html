@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Search engines and link previews read these before any script runs: update them with your name. -->
+  <title>Adnan Abir · Research &amp; ventures</title>
+  <meta name="description" content="Transport modeller, MATSim researcher and founder: live simulation, publications, ventures and code.">
+  <meta name="theme-color" content="#080C14">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23080C14'/%3E%3Cpath d='M6 23 15 11 26 19' stroke='%23F4A93C' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='15' cy='11' r='3.6' fill='%233987e5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="data/site.config.js" defer></script>
+  <script src="assets/js/sim.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap">
+    <p class="sample-banner" id="sample-banner" hidden>
+      <b>Sample content.</b> Replace it in <code>data/site.config.js</code>, then set <code>sample: false</code> to hide this bar.
+    </p>
+
+    <header class="masthead">
+      <div class="mast-main">
+        <div class="id">
+          <span class="shield" id="id-initials" aria-hidden="true">AA</span>
+          <div>
+            <h1 id="id-name">Adnan Abir</h1>
+            <p class="roles" id="id-roles"></p>
+          </div>
+        </div>
+        <p class="tagline" id="id-tagline"></p>
+      </div>
+      <div class="mast-side">
+        <p class="status" id="id-status"><span class="status-dot" aria-hidden="true"></span><span id="id-status-label"></span></p>
+        <nav aria-label="Profiles"><ul class="links" id="id-links"></ul></nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Live simulation -->
+      <section class="panel sim" id="sim" aria-labelledby="sim-title">
+        <header class="panel-head">
+          <div class="ph-left">
+            <span class="live-dot" aria-hidden="true"></span>
+            <h2 class="ph-title" id="sim-title">Live mobsim · morning peak</h2>
+            <span class="ph-meta" id="sim-meta"></span>
+          </div>
+          <div class="sim-controls">
+            <button type="button" class="btn btn-primary" id="sim-play">Pause</button>
+            <div class="seg" role="group" aria-label="Playback speed">
+              <button type="button" id="speed-30" data-speed="30" aria-pressed="false">×30</button>
+              <button type="button" id="speed-60" data-speed="60" aria-pressed="true">×60</button>
+              <button type="button" id="speed-180" data-speed="180" aria-pressed="false">×180</button>
+            </div>
+            <button type="button" class="btn" id="sim-next" title="Finish this morning, re-route 15% of drivers on the travel times they experienced, and start the next iteration">Next iteration</button>
+          </div>
+        </header>
+        <div class="sim-body">
+          <div class="sim-stage">
+            <canvas id="sim-canvas" tabindex="0" aria-label="Animated agent-based traffic simulation of a morning peak. Press space to play or pause."></canvas>
+            <p class="sim-hint" aria-hidden="true">Hover an agent to see its plan, or a road to see its load</p>
+            <div class="load-legend" aria-hidden="true"><span>Link load v/c</span><span>0</span><i></i><span>1.2+</span></div>
+            <div class="sim-tip" id="sim-tip" hidden></div>
+          </div>
+          <aside class="sim-rail" aria-label="Simulation telemetry">
+            <div class="clock">
+              <span class="clock-time" id="sim-clock">07:20</span>
+              <span class="clock-sub"><span id="sim-iter">iteration 4</span><br>simulated time</span>
+            </div>
+            <dl class="tiles">
+              <div><dt>En route</dt><dd id="st-enroute">–</dd></div>
+              <div><dt>Arrived</dt><dd id="st-arrived">–</dd></div>
+              <div><dt>Avg car speed</dt><dd id="st-speed">–</dd></div>
+              <div><dt>Busiest link</dt><dd id="st-vc">–</dd></div>
+            </dl>
+            <figure class="mini">
+              <figcaption>Agents en route</figcaption>
+              <div class="chart" id="ch-enroute"></div>
+            </figure>
+            <figure class="mini">
+              <figcaption>Modal split · trips</figcaption>
+              <div id="modal-split"></div>
+            </figure>
+            <figure class="mini">
+              <figcaption>Avg car travel time by iteration</figcaption>
+              <div class="chart" id="ch-conv"></div>
+            </figure>
+          </aside>
+        </div>
+        <p class="sim-foot">
+          A toy model in the spirit of MATSim: every agent has a plan (home → work), the mobsim moves them through the network,
+          cars slow down as links load up (BPR), and after each simulated morning 15% of drivers re-route on the travel times they
+          actually experienced. Watch the travel-time line settle as the iterations relax.
+        </p>
+      </section>
+
+      <div class="grid">
+        <section class="panel col-venture" aria-labelledby="ventures-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="ventures-title">Ventures</h2>
+            <span class="ph-meta" id="ventures-meta"></span>
+          </header>
+          <div id="ventures"></div>
+        </section>
+
+        <div class="col-side">
+        <section class="panel" aria-labelledby="now-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="now-title">Now</h2>
+            <span class="ph-meta" id="now-loc"></span>
+          </header>
+          <div class="panel-body">
+            <ul class="now-list" id="now-list"></ul>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="research-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="research-title">Research</h2>
+            <span class="ph-meta">agent-based transport</span>
+          </header>
+          <div class="panel-body research">
+            <ul class="focus" id="focus"></ul>
+            <ul class="stack" id="stack" aria-label="Tools"></ul>
+            <div class="table-wrap">
+              <table class="scen">
+                <thead><tr><th scope="col">Scenario</th><th scope="col" class="num">Sample</th><th scope="col" class="num">Agents</th><th scope="col" class="num">Links</th><th scope="col" class="num">Iter.</th></tr></thead>
+                <tbody id="scenarios"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel col-pubs" aria-labelledby="pubs-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="pubs-title">Publications</h2>
+            <span class="ph-meta" id="pub-count" aria-live="polite"></span>
+          </header>
+          <div class="panel-body">
+            <div class="filters">
+              <label class="search">
+                <span class="visually-hidden">Search publications</span>
+                <input type="search" id="pub-search" placeholder="Search title, author, venue, topic" autocomplete="off">
+              </label>
+              <div class="chips" id="pub-years" role="group" aria-label="Filter by year"></div>
+            </div>
+            <div class="chips chips-topics" id="pub-topics" role="group" aria-label="Filter by topic"></div>
+            <ol class="pubs" id="pubs"></ol>
+            <p class="visually-hidden" id="copy-status" aria-live="polite"></p>
+          </div>
+        </section>
+        </div>
+
+        <section class="panel col-gh" aria-labelledby="gh-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="gh-title">GitHub</h2>
+            <span class="ph-meta" id="gh-meta"></span>
+          </header>
+          <div class="panel-body" id="gh-body">
+            <p class="muted">Fetching from GitHub…</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="foot" id="foot"></footer>
+  </div>
+</body>
+</html>
