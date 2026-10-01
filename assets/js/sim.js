@@ -290,9 +290,9 @@
       const path = d.map((p, i) => (i ? "L" : "M") + X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join("");
       if (o.area) s += `<path d="${path}L${X(d[d.length - 1][0]).toFixed(1)},${Y(o.y0)}L${X(d[0][0]).toFixed(1)},${Y(o.y0)}Z" fill="${o.color}" fill-opacity="0.14"/>`;
       s += `<path d="${path}" fill="none" stroke="${o.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
-      if (o.dots) for (const p of d) s += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5" fill="${o.color}" stroke="var(--panel)" stroke-width="2"/>`;
+      if (o.dots) for (const p of d) s += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5" fill="${o.color}" stroke="var(--card)" stroke-width="2"/>`;
       const last = d[d.length - 1];
-      s += `<circle cx="${X(last[0])}" cy="${Y(last[1])}" r="4" fill="${o.color}" stroke="var(--panel)" stroke-width="2"/>`;
+      s += `<circle cx="${X(last[0])}" cy="${Y(last[1])}" r="4" fill="${o.color}" stroke="var(--card)" stroke-width="2"/>`;
       s += `<text class="c-end" x="${X(last[0]) + 8}" y="${Y(last[1])}" dominant-baseline="middle">${o.fmtEnd(last)}</text>`;
       const tip = host.querySelector(".chart-tip");
       if (host._hi != null && d[host._hi]) {
@@ -326,14 +326,18 @@
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const stage = canvas.parentElement, tip = $("sim-tip");
-    const css = getComputedStyle(document.documentElement);
-    const tok = (k) => css.getPropertyValue("--" + k).trim();
-    const C = {
-      ground: tok("ground"), road: tok("road"), ring: tok("road-ring"),
-      ink: tok("ink"), ink3: tok("ink-3"), accent: tok("accent"),
-    };
-    for (const md of MODES) C[md] = tok("mode-" + md);
-    const ramp = buildRamp([tok("load-0"), tok("load-1"), tok("load-2")], [0, 0.6, 1]);
+    const tok = (k) => getComputedStyle(document.documentElement).getPropertyValue("--" + k).trim();
+    const C = {};
+    let ramp = [];
+    function readTokens() {
+      Object.assign(C, {
+        ground: tok("ground"), road: tok("road"), ring: tok("road-ring"),
+        ink: tok("ink"), ink3: tok("ink-3"), accent: tok("accent"),
+      });
+      for (const md of MODES) C[md] = tok("mode-" + md);
+      ramp = buildRamp([tok("load-0"), tok("load-1"), tok("load-2")], [0, 0.6, 1]);
+    }
+    readTokens();
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const model = createModel(cfg);
@@ -390,7 +394,7 @@
       for (const L of net.links) { ctx.strokeStyle = L.type === "ring" ? C.ring : C.road; ctx.lineWidth = L.w; seg(L); }
       for (const L of net.links) {
         const vc = vcOf(model, L);
-        if (vc < 0.05) continue;
+        if (vc < 0.1) continue;
         ctx.strokeStyle = ramp[Math.round(clamp(vc / 1.2, 0, 1) * (ramp.length - 1))];
         ctx.lineWidth = L.w + Math.min(vc, 1.2) * 1.6;
         seg(L);
@@ -597,6 +601,13 @@
     }
     requestAnimationFrame(frame);
     window.addEventListener("resize", () => { renderEnroute(); renderConvergence(); });
+    // follow the visitor's system theme without a reload
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+      readTokens();
+      renderEnroute();
+      renderConvergence();
+      dirty = true;
+    });
   }
 
   function buildRamp(hexes, at) {

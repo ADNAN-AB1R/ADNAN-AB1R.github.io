@@ -14,11 +14,18 @@
   const taka = (n) => "৳" + fmtInt(n);
   const page = document.body.dataset.page || "home";
 
+  const ICONS = {
+    home: '<rect x="3" y="3" width="7.5" height="8.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.6"/><rect x="13.5" y="10.5" width="7.5" height="10.5" rx="1.6"/><rect x="3" y="14" width="7.5" height="7" rx="1.6"/>',
+    research: '<path d="M9 3h6M10 3v6.4L5.2 18A2 2 0 0 0 7 21h10a2 2 0 0 0 1.8-3L14 9.4V3M7.6 14h8.8"/>',
+    projects: '<path d="M3 7.5A2 2 0 0 1 5 5.5h3.6l2 2.2H19a2 2 0 0 1 2 2v7.8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    about: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20.5c0-3.6 3.1-6 7-6s7 2.4 7 6"/>',
+  };
   const PAGES = [
-    { page: "home", href: "index.html", label: "Dashboard" },
-    { page: "research", href: "research.html", label: "Research" },
-    { page: "projects", href: "projects.html", label: "Projects" },
-    { page: "about", href: "about.html", label: "About" },
+    { page: "home", href: "index.html", label: "Dashboard", icon: "home" },
+    { page: "research", href: "research.html", label: "Research", icon: "research" },
+    { page: "projects", href: "projects.html", label: "Projects", icon: "projects",
+      lede: "Three things I'm responsible for: a transport model, a shop that takes orders, and this site." },
+    { page: "about", href: "about.html", label: "About", icon: "about" },
   ];
   const LINK_DEFS = [
     ["email", "Email", (v) => "mailto:" + v],
@@ -31,39 +38,45 @@
   function profileLinks() {
     const L = S.links || {};
     return LINK_DEFS.filter(([k]) => L[k])
-      .map(([k, label, fn]) => { const href = fn ? fn(L[k]) : L[k]; return `<li><a href="${esc(href)}"${ext(href)}>${label}</a></li>`; })
+      .map(([k, label, fn]) => { const href = fn ? fn(L[k]) : L[k]; return `<a href="${esc(href)}"${ext(href)}>${label}</a>`; })
       .join("");
   }
 
   function renderLayout() {
-    if (S.name) document.title = page === "home" ? `${S.name} · Research & ventures` : `${PAGES.find((p) => p.page === page).label} · ${S.name}`;
+    const current = PAGES.find((p) => p.page === page) || PAGES[0];
+    if (S.name) document.title = page === "home" ? `${S.name} · Research & ventures` : `${current.label} · ${S.name}`;
     const initials = S.initials || String(S.name || "").split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-    const roles = (S.roles || []).map(esc).join('<span aria-hidden="true"> / </span>');
-    const home = page === "home";
-    const mast = $("masthead");
-    if (mast) {
-      mast.className = "masthead" + (home ? "" : " compact");
-      mast.innerHTML = `
-        <div class="mast-main">
-          <div class="id">
-            <a class="shield" href="index.html" aria-label="${esc(S.name || "Home")}">${esc(initials)}</a>
-            <div>
-              <${home ? "h1" : "p"} id="id-name">${esc(S.name || "")}</${home ? "h1" : "p"}>
-              <p class="roles">${roles}</p>
-            </div>
-          </div>
-          ${home && S.tagline ? `<p class="tagline">${esc(S.tagline)}</p>` : ""}
-        </div>
-        <div class="mast-side">
+
+    const sb = $("sidebar");
+    if (sb) {
+      sb.innerHTML = `
+        <a class="sb-brand" href="index.html">
+          <span class="sb-mark" aria-hidden="true">${esc(initials)}</span>
+          <span><span class="sb-name">${esc(S.name || "")}</span><span class="sb-role">${esc((S.roles || [])[0] || "")}</span></span>
+        </a>
+        <nav class="sb-nav" aria-label="Pages">
+          <p class="sb-label">Menu</p>
+          <ul>${PAGES.map((p) => `<li><a href="${p.href}"${p.page === page ? ' aria-current="page"' : ""}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[p.icon]}</svg>${p.label}</a></li>`).join("")}</ul>
+        </nav>
+        <div class="sb-foot">
           ${S.status && S.status.label ? `<p class="status" data-state="${esc(S.status.state || "good")}"><span class="status-dot" aria-hidden="true"></span>${esc(S.status.label)}</p>` : ""}
-          <nav aria-label="Profiles"><ul class="links">${profileLinks()}</ul></nav>
+          <nav aria-label="Profiles"><div class="sb-links">${profileLinks()}</div></nav>
         </div>`;
     }
-    const nav = $("nav");
-    if (nav) {
-      nav.innerHTML = `<ul>${PAGES.map((p) =>
-        `<li><a href="${p.href}"${p.page === page ? ' aria-current="page"' : ""}>${p.label}</a></li>`).join("")}</ul>`;
+
+    const title = $("page-title");
+    const lede = $("page-lede");
+    if (title) title.textContent = page === "home" ? (S.name || "") : current.label;
+    if (lede) {
+      const text = page === "home" ? S.tagline
+        : page === "research" ? (S.research || {}).lede
+        : page === "about" ? S.tagline
+        : current.lede;
+      lede.textContent = text || "";
+      lede.hidden = !text;
     }
+
     const foot = $("foot");
     if (foot) {
       foot.innerHTML =
@@ -326,7 +339,6 @@
   // ── Page: research ───────────────────────────────────────────
   function renderResearch() {
     const R = S.research || {};
-    $("research-lede").textContent = R.lede || "";
     $("scenario-title").textContent = R.title || "";
     $("scenario-status").innerHTML = R.status ? statusChip(R.status.toLowerCase()) : "";
     $("scenario-summary").textContent = R.summary || "";
@@ -366,7 +378,6 @@
 
   // ── Page: about ──────────────────────────────────────────────
   function renderAbout() {
-    $("about-lede").textContent = S.tagline || "";
     $("experience").innerHTML = (S.experience || []).map((x) => `<li>
       <div class="xp-head">
         <h3 class="xp-title">${esc(x.title)}</h3>
