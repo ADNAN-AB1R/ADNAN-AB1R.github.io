@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research · Adnan Abir</title>
+  <meta name="description" content="Building an agent-based MATSim scenario for Dhaka from open data: network, transit schedule, synthetic population and mode choice.">
+  <meta name="theme-color" content="#080C14">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23080C14'/%3E%3Cpath d='M6 23 15 11 26 19' stroke='%23F4A93C' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='15' cy='11' r='3.6' fill='%233987e5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="data/site.config.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header class="masthead compact" id="masthead"></header>
+    <nav class="nav" id="nav" aria-label="Pages"></nav>
+
+    <main id="main">
+      <section class="page-intro">
+        <h1 class="page-title">Research</h1>
+        <p class="page-lede" id="research-lede"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="scenario-title">
+        <header class="panel-head">
+          <h2 class="ph-title" id="scenario-title"></h2>
+          <span class="ph-meta" id="scenario-status"></span>
+        </header>
+        <div class="panel-body stack-body">
+          <p class="lede" id="scenario-summary"></p>
+
+          <figure class="pipe-figure">
+            <figcaption class="sub">How the scenario is assembled</figcaption>
+            <ol class="pipe" id="pipeline"></ol>
+          </figure>
+
+          <div class="two-col">
+            <div>
+              <h3 class="sub">Built so far</h3>
+              <ul class="check" id="built"></ul>
+            </div>
+            <div>
+              <h3 class="sub">Next</h3>
+              <ul class="check next" id="next"></ul>
+            </div>
+          </div>
+
+          <p class="note" id="collab"></p>
+        </div>
+      </section>
+
+      <div class="grid">
+        <section class="panel span-7" aria-labelledby="tools-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="tools-title">Tools</h2>
+            <span class="ph-meta">what each one does</span>
+          </header>
+          <div class="panel-body">
+            <div class="table-wrap">
+              <table class="tools">
+                <thead><tr><th scope="col">Tool</th><th scope="col">Used for</th></tr></thead>
+                <tbody id="tools-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel span-5" aria-labelledby="repos-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="repos-title">Toolchain</h2>
+            <span class="ph-meta">live from GitHub</span>
+          </header>
+          <div class="panel-body">
+            <ul class="repos" id="toolchain"><li class="muted">Loading…</li></ul>
+            <h3 class="sub" style="margin-top:16px">Reference scenarios studied</h3>
+            <ul class="stack" id="reference"></ul>
+          </div>
+        </section>
+
+        <section class="panel span-12" aria-labelledby="pubs-title">
+          <header class="panel-head">
+            <h2 class="ph-title" id="pubs-title">Publication</h2>
+            <span class="ph-meta">peer-reviewed venue</span>
+          </header>
+          <div class="panel-body">
+            <div id="pubs"></div>
+            <p class="visually-hidden" id="copy-status" aria-live="polite"></p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="foot" id="foot"></footer>
+  </div>
+</body>
+</html>
